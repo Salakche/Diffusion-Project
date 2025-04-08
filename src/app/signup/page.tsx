@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 export default function SignUp() {
+  const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -13,12 +14,13 @@ export default function SignUp() {
   const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!fullName || !email || !password) {
       setError('Please fill in all fields');
       return;
     }
 
     // Store credentials in localStorage
+    localStorage.setItem('userFullName', fullName);
     localStorage.setItem('userEmail', email);
     localStorage.setItem('userPassword', password);
 
@@ -37,6 +39,19 @@ export default function SignUp() {
 
         <div className="bg-gradient-to-b from-green-900/20 to-green-900/10 rounded-2xl p-8 backdrop-blur-sm border border-green-900/50 shadow-2xl shadow-green-900/20">
           <form onSubmit={handleSignUp} className="space-y-6">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                className="w-full rounded-lg bg-black/50 border border-green-900/50 text-gray-100 p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                placeholder="Enter your full name"
+              />
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email
