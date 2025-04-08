@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Sparkles, Wand2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import axios from 'axios';
 
 export default function Home() {
@@ -9,6 +10,14 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const router = useRouter();
+
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn');
+    if (!isLoggedIn) {
+      router.push('/signin');
+    }
+  }, [router]);
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -50,7 +59,7 @@ export default function Home() {
             <Wand2 className="h-12 w-12 text-green-500 mb-4" />
           </div>
           
-          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent animate-gradient">
+          <h1 className="text-5xl font-bold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent animate-gradient pb-1">
             AI Image Generator
           </h1>
           
