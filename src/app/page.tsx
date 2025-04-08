@@ -44,7 +44,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen py-12 px-4">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="text-center mb-16 space-y-6">
           <div className="inline-block animate-bounce">
             <Wand2 className="h-12 w-12 text-green-500 mb-4" />
