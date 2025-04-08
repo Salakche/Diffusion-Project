@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Sparkles, Wand2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import ImageInpainter from '@/components/ImageInpainter';
 
 export default function Home() {
   const [prompt, setPrompt] = useState('');
@@ -18,6 +19,8 @@ export default function Home() {
       router.push('/signin');
     }
   }, [router]);
+
+  const userFullName = typeof window !== 'undefined' ? localStorage.getItem('userFullName') : null;
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -60,7 +63,7 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl font-bold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent animate-gradient pb-1">
-            AI Image Generator
+            Welcome, {userFullName || 'User'}!
           </h1>
           
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
@@ -130,6 +133,9 @@ export default function Home() {
             )}
           </div>
         </div>
+
+        {/* Inpainting Section */}
+        <ImageInpainter />
       </div>
     </main>
   );
