@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 const STABILITY_API_KEY = process.env.STABILITY_API_KEY;
-const STABILITY_API_URL = 'https://api.stability.ai/v1/generation/stable-diffusion-xl-1-0/text-to-image';
+const STABILITY_API_URL = 'https://api.stability.ai/v1/generation/stable-diffusion-v1-6/text-to-image';
 
 export const POST = async (req: Request) => {
   try {
@@ -27,8 +27,8 @@ export const POST = async (req: Request) => {
       {
         text_prompts: [{ text: prompt }],
         cfg_scale: 7,
-        height: 1024,
-        width: 1024,
+        height: 512,
+        width: 512,
         steps: 30,
         samples: 1,
       },
