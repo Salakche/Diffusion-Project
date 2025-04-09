@@ -67,7 +67,7 @@ export default function Home() {
           </h1>
           
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            Transform your imagination into stunning visuals using Stability.ai SDXL 1.0
+            Transform your imagination into stunning visuals using Stability.ai
           </p>
         </div>
 
