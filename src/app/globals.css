@@ -6,11 +6,11 @@
   :root {
     --color-primary: 34 197 94;
     --color-secondary: 21 128 61;
-    --color-background: 2 6 12;
+    --color-background: 17 24 39;
   }
 
   body {
-    @apply bg-black text-gray-100;
+    @apply bg-gray-900 text-gray-100;
   }
 }
 
