@@ -122,12 +122,17 @@ export default function ImageInpainter() {
 
     try {
       // Convert base64 to blob
-      const uploadedImageBlob = await fetch(uploadedImage).then(r => r.blob());
-      const maskImageBlob = await fetch(maskImage).then(r => r.blob());
+      const uploadedImageBlob = await fetch(uploadedImage)
+        .then(r => r.blob())
+        .then(blob => new Blob([blob], { type: 'image/png' }));
+
+      const maskImageBlob = await fetch(maskImage)
+        .then(r => r.blob())
+        .then(blob => new Blob([blob], { type: 'image/png' }));
 
       const formData = new FormData();
-      formData.append('image', uploadedImageBlob);
-      formData.append('mask', maskImageBlob);
+      formData.append('image', uploadedImageBlob, 'image.png');
+      formData.append('mask', maskImageBlob, 'mask.png');
       formData.append('prompt', prompt);
 
       const response = await axios.post('/api/inpaint', formData, {
@@ -136,9 +141,13 @@ export default function ImageInpainter() {
         },
       });
 
+      if (response.data.error) {
+        throw new Error(response.data.error);
+      }
+
       setResultImage(response.data.imageUrl);
-    } catch (err) {
-      setError('Failed to inpaint image. Please try again.');
+    } catch (err: any) {
+      setError(err.message || 'Failed to inpaint image. Please try again.');
       console.error('Error inpainting image:', err);
     } finally {
       setIsLoading(false);
