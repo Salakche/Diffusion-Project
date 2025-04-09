@@ -195,12 +195,7 @@ export default function ImageInpainter() {
               >
                 <Brush className="h-5 w-5" />
               </button>
-              <button
-                onClick={() => setIsEraser(true)}
-                className={`p-2 rounded-lg ${isEraser ? 'bg-green-600' : 'bg-black/30'} hover:bg-green-500 transition-all`}
-              >
-                <Eraser className="h-5 w-5" />
-              </button>
+              
               <input
                 type="range"
                 min="1"
