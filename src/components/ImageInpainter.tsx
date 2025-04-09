@@ -78,13 +78,33 @@ export default function ImageInpainter() {
     if (!canvas) return null;
 
     const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
+    
+    // Calculate the scaling factors for the image
+    const canvasAspect = canvas.width / canvas.height;
+    const containerAspect = rect.width / rect.height;
+    
+    let renderWidth = rect.width;
+    let renderHeight = rect.height;
+    let offsetX = 0;
+    let offsetY = 0;
 
-    return {
-      x: (e.clientX - rect.left) * scaleX,
-      y: (e.clientY - rect.top) * scaleY
-    };
+    if (containerAspect > canvasAspect) {
+      // Container is wider than needed
+      renderWidth = rect.height * canvasAspect;
+      offsetX = (rect.width - renderWidth) / 2;
+    } else {
+      // Container is taller than needed
+      renderHeight = rect.width / canvasAspect;
+      offsetY = (rect.height - renderHeight) / 2;
+    }
+
+    const scaleX = canvas.width / renderWidth;
+    const scaleY = canvas.height / renderHeight;
+
+    const x = (e.clientX - rect.left - offsetX) * scaleX;
+    const y = (e.clientY - rect.top - offsetY) * scaleY;
+
+    return { x, y };
   };
 
   const startDrawing = (e: React.MouseEvent) => {
