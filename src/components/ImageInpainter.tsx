@@ -13,8 +13,10 @@ export default function ImageInpainter() {
   const [resultImage, setResultImage] = useState<string | null>(null);
   const [brushSize, setBrushSize] = useState(20);
   const [isEraser, setIsEraser] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const imageRef = useRef<HTMLImageElement | null>(null);
   const contextRef = useRef<CanvasRenderingContext2D | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
 
@@ -37,32 +39,35 @@ export default function ImageInpainter() {
     }
   }, [brushSize, isEraser]);
 
+  // Handle image loading and canvas setup
+  useEffect(() => {
+    if (uploadedImage && imageRef.current && canvasRef.current) {
+      imageRef.current.onload = () => {
+        const canvas = canvasRef.current!;
+        canvas.width = imageRef.current!.naturalWidth;
+        canvas.height = imageRef.current!.naturalHeight;
+
+        const context = canvas.getContext('2d');
+        if (context) {
+          context.drawImage(imageRef.current!, 0, 0);
+          context.lineCap = 'round';
+          context.strokeStyle = isEraser ? '#000000' : '#ffffff';
+          context.lineWidth = brushSize;
+          contextRef.current = context;
+          setImageLoaded(true);
+        }
+      };
+      imageRef.current.src = uploadedImage;
+    }
+  }, [uploadedImage, brushSize, isEraser]);
+
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = (event) => {
-        const img = new Image();
-        img.onload = () => {
-          if (canvasRef.current) {
-            // Set canvas dimensions to match image
-            const canvas = canvasRef.current;
-            canvas.width = img.width;
-            canvas.height = img.height;
-
-            // Draw image and initialize context
-            const context = canvas.getContext('2d');
-            if (context) {
-              context.drawImage(img, 0, 0);
-              context.lineCap = 'round';
-              context.strokeStyle = isEraser ? '#000000' : '#ffffff';
-              context.lineWidth = brushSize;
-              contextRef.current = context;
-            }
-          }
-          setUploadedImage(event.target?.result as string);
-        };
-        img.src = event.target?.result as string;
+        setUploadedImage(event.target?.result as string);
+        setImageLoaded(false); // Reset image loaded state
       };
       reader.readAsDataURL(file);
     }
@@ -84,7 +89,7 @@ export default function ImageInpainter() {
 
   const startDrawing = (e: React.MouseEvent) => {
     const point = getCanvasPoint(e);
-    if (!point) return;
+    if (!point || !imageLoaded) return;
 
     contextRef.current?.beginPath();
     contextRef.current?.moveTo(point.x, point.y);
@@ -92,7 +97,7 @@ export default function ImageInpainter() {
   };
 
   const draw = (e: React.MouseEvent) => {
-    if (!isDrawing || !contextRef.current) return;
+    if (!isDrawing || !contextRef.current || !imageLoaded) return;
 
     const point = getCanvasPoint(e);
     if (!point) return;
@@ -102,6 +107,8 @@ export default function ImageInpainter() {
   };
 
   const stopDrawing = () => {
+    if (!imageLoaded) return;
+    
     contextRef.current?.closePath();
     setIsDrawing(false);
 
@@ -162,6 +169,9 @@ export default function ImageInpainter() {
       </div>
 
       <div className="space-y-6">
+        {/* Hidden Image Element for Loading */}
+        <img ref={imageRef} className="hidden" alt="" />
+
         {/* Image Upload */}
         <div className="space-y-2">
           <label className="block text-sm font-medium text-gray-300">
@@ -215,7 +225,13 @@ export default function ImageInpainter() {
                 onMouseUp={stopDrawing}
                 onMouseLeave={stopDrawing}
                 className="w-full h-[400px] object-contain bg-black/30"
+                style={{ display: imageLoaded ? 'block' : 'none' }}
               />
+              {!imageLoaded && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                  <div className="text-green-500">Loading image...</div>
+                </div>
+              )}
             </div>
           </div>
         )}
