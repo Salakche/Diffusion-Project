@@ -13,14 +13,18 @@ export default function Home() {
   const [imageUrl, setImageUrl] = useState('');
   const router = useRouter();
 
+  // Check authentication on initial load
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem('isLoggedIn');
-    if (!isLoggedIn) {
-      router.push('/signin');
-    }
+    const checkAuth = () => {
+      const isAuthenticated = sessionStorage.getItem('isAuthenticated');
+      if (!isAuthenticated) {
+        router.replace('/signin');
+      }
+    };
+
+    checkAuth();
   }, [router]);
 
-  const userFullName = typeof window !== 'undefined' ? localStorage.getItem('userFullName') : null;
 
   const handleSubmit = async () => {
     if (!prompt.trim()) {
@@ -63,7 +67,7 @@ export default function Home() {
           </div>
           
           <h1 className="text-5xl font-bold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent animate-gradient pb-1">
-            Welcome, {userFullName || 'User'}!
+            Welcome, Admin!
           </h1>
           
           <p className="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">

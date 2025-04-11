@@ -2,10 +2,9 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 export default function SignIn() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const router = useRouter();
@@ -13,22 +12,18 @@ export default function SignIn() {
   const handleSignIn = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password) {
+    if (!username || !password) {
       setError('Please fill in all fields');
       return;
     }
 
-    // Get stored credentials
-    const storedEmail = localStorage.getItem('userEmail');
-    const storedPassword = localStorage.getItem('userPassword');
-
-    // Compare credentials
-    if (email === storedEmail && password === storedPassword) {
+    // Check against hardcoded credentials
+    if (username === 'admin' && password === '123') {
       // Successful login
-      localStorage.setItem('isLoggedIn', 'true');
+      sessionStorage.setItem('isAuthenticated', 'true');
       router.push('/'); // Redirect to home page
     } else {
-      setError('Invalid email or password');
+      setError('Invalid username or password');
     }
   };
 
@@ -45,14 +40,14 @@ export default function SignIn() {
           <form onSubmit={handleSignIn} className="space-y-6">
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
-                Email
+                Username
               </label>
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
                 className="w-full rounded-lg bg-black/50 border border-green-900/50 text-gray-100 p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                placeholder="Enter your email"
+                placeholder="Enter username"
               />
             </div>
 
@@ -65,7 +60,7 @@ export default function SignIn() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full rounded-lg bg-black/50 border border-green-900/50 text-gray-100 p-3 focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                placeholder="Enter your password"
+                placeholder="Enter password"
               />
             </div>
 
@@ -81,13 +76,6 @@ export default function SignIn() {
             >
               Sign In
             </button>
-
-            <p className="text-center text-gray-400 text-sm">
-              Don&apos;t have an account?{' '}
-              <Link href="/signup" className="text-green-500 hover:text-green-400">
-                Sign Up
-              </Link>
-            </p>
           </form>
         </div>
       </div>
