@@ -21,7 +21,7 @@ export default function SignIn() {
     if (username === 'admin' && password === '123') {
       // Successful login
       sessionStorage.setItem('isAuthenticated', 'true');
-      router.push('/'); // Redirect to home page
+      router.push('/dashboard'); // Redirect to dashboard
     } else {
       setError('Invalid username or password');
     }
