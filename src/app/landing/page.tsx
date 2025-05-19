@@ -12,7 +12,7 @@ export default function LandingPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 relative z-10">
           <div className="text-center">
             <h1 className="text-6xl font-bold bg-gradient-to-r from-green-400 via-green-500 to-green-600 bg-clip-text text-transparent animate-gradient pb-2">
-              Windsurf AI
+              AI image generation
             </h1>
             <p className="mt-4 text-xl text-gray-300 max-w-3xl mx-auto">
               Transform your imagination into stunning visuals with our AI-powered image generation and editing tools.
@@ -129,7 +129,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-500">© 2025 Windsurf AI. Powered by Stability AI.</p>
+          <p className="text-gray-500">© 2025 Salakche AI. Powered by Stability AI.</p>
         </div>
       </footer>
     </main>
