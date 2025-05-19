@@ -129,7 +129,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="py-8 bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-500">© 2025 Salakche AI. Powered by Stability AI.</p>
+          <p className="text-gray-500">© 2025 Salakche AI.</p>
         </div>
       </footer>
     </main>
